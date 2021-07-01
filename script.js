@@ -71,7 +71,7 @@ function setPose(index) {
 		sprites.push(new Image());
 		sprites[i].crossOrigin = "anonymous"; // Avoids security errors
 		sprites[i].addEventListener("load", imageLoaded);
-		sprites[i].src = "https://miepee.github.io/AM2RSuitEditor/assets/sprites/" + spriteObjects[objectIndex] + "/" + (objectIndex == 0 ? suitNames[suitIndex] + "/" + poseNames[poseIndex] : monsterNames[monsterIndex]) + "/" + i.toString() + ".png";
+		sprites[i].src = "https://miepee.github.io/AM2RSuitEditor/assets/sprites/" + spriteObjects[objectIndex] + "/" + (objectIndex == 0 ? suitNames[suitIndex] + "/" + poseNames[poseIndex] : monsterNames[monsterIndex] + "/" + poseNames[poseIndex]) + "/" + i.toString() + ".png";
 	}
 }
 
