@@ -5,13 +5,17 @@
 	suitCanvas Setup
 */
 
+const spriteObjects = ["samus", "metroids"];
 const suitNames = ["power", "varia", "gravity", "fusion_power", "fusion_varia", "fusion_gravity"];
 const poseNames = ["front", "side", "walk", "run", "morph_ball"];
+const monsterNames = ["alpha" , "gamma", "zeta", "omega"];
 const poseImageCount = [4, 4, 10, 10, 8]; // Helps determine how many images there are to load
 const poseOffsets = [0, 45, 55, 65, 81]; // Helps vertically center the suit on suitCanvas
 
+let objectIndex; // Index of current object. Either samus or metroids
 let suitIndex; // Index of current suit
 let poseIndex; // Index of current pose
+let monsterIndex; // Index of current monster
 
 const suitCanvas = document.getElementById("canvas"); // Suit is drawn to this canvas
 const suitCtx = suitCanvas.getContext("2d");
@@ -35,6 +39,14 @@ function setAnimationSpeed(x) {
 
 setAnimationSpeed(1);
 
+// Changes between Samus and Metroids
+function setObject(index) {
+    objectIndex = index;
+    suitIndex = 0;
+    monsterIndex = 0;
+    document.getElementById("objectText").innerHTML = spriteObjects[objectIndex].toUpperCase();
+}
+
 // Changes the current suit. This function is called at the beginning of the program
 function setSuit(index) {
 	suitIndex = index;
@@ -42,7 +54,7 @@ function setSuit(index) {
 	setPose(0);
 	
 	// When this image loads, the palette is initialized via paletteImg's EventListener function
-	paletteImg.src = "https://electrixcodes.github.io/AM2RSuitEditor/assets/palettes/" + suitNames[suitIndex] + ".png";
+	paletteImg.src =  "https://miepee.github.io/AM2RSuitEditor/assets/palettes/" + (objectIndex == 0 ? suitNames[suitIndex] : monsterNames[monsterIndex]) + ".png";
 }
 
 // Changes the current pose, loading the necessary images to do so
@@ -59,7 +71,7 @@ function setPose(index) {
 		sprites.push(new Image());
 		sprites[i].crossOrigin = "anonymous"; // Avoids security errors
 		sprites[i].addEventListener("load", imageLoaded);
-		sprites[i].src = "https://electrixcodes.github.io/AM2RSuitEditor/assets/sprites/" + suitNames[suitIndex] + "/" + poseNames[poseIndex] + "/" + i.toString() + ".png";
+		sprites[i].src = "https://miepee.github.io/AM2RSuitEditor//assets/sprites/" + spriteObjects[objectIndex] + "/" + (objectIndex == 0 ? suitNames[suitIndex] + "/" + poseNames[poseIndex] : monsterNames[monsterIndex]) + "/" + i.toString() + ".png";
 	}
 }
 
@@ -198,7 +210,7 @@ function drawPalette() {
 }
 
 
-
+setObject(0);
 setSuit(0);
 
 
@@ -264,6 +276,21 @@ suitCanvas.addEventListener("click", function(evt) {
 		}
 	}
 });
+
+// Change to previous object on click
+document.getElementById("prevObjectButton").addEventListener("click", function() {
+	if (confirm("Change object?\nWarning: This will clear your current palette.")) {
+		setObject((objectIndex + spriteObjects.length - 1) % spriteObjects.length);
+	}
+});
+
+// Change to next object on click
+document.getElementById("nextObjectButton").addEventListener("click", function() {
+	if (confirm("Change object?\nWarning: This will clear your current palette.")) {
+		setObject((objectIndex + 1) % spriteObjects.length);
+	}
+});
+
 
 // Change to previous suit on click
 document.getElementById("prevSuitButton").addEventListener("click", function() {
